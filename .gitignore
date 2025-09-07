@@ -1,0 +1,10 @@
+target/
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+out/
+bin/
+.DS_Store
+.bsp/
+plugins.sbt

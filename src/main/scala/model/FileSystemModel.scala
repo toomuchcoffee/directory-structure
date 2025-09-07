@@ -5,9 +5,16 @@ sealed trait Node:
 
   def parentId: Option[Int]
 
+  def name: String
+
+  def size: Int
+
 case class Directory(id: Int,
                      parentId: Option[Int],
-                     name: String) extends Node
+                     name: String,
+                     children: Seq[Node] = Seq.empty) extends Node {
+  def size: Int = children.map(_.size).sum
+}
 
 case class File(id: Int,
                 parentId: Option[Int],
@@ -17,9 +24,9 @@ case class File(id: Int,
                 checksum: Int) extends Node
 
 enum Classification(val value: String):
-  case Public extends Classification("public")
-  case Secret extends Classification("secret")
-  case TopSecret extends Classification("top secret")
+  case Public extends Classification("Public")
+  case Secret extends Classification("Secret")
+  case TopSecret extends Classification("Top secret")
 
 object Classification:
   def fromString(s: String): Option[Classification] = s.toLowerCase match

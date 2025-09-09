@@ -9,11 +9,17 @@ sealed trait Node:
 
   def size: Int
 
+  def toDisplayString(indent: String = ""): String
+
 case class Directory(id: Int,
                      parentId: Option[Int],
                      name: String,
                      children: Seq[Node] = Seq.empty) extends Node {
-  def size: Int = children.map(_.size).sum
+  override def size: Int = children.map(_.size).sum
+
+  override def toDisplayString(indent: String = ""): String =
+    val childrenStr = children.sortBy(_.name).map(_.toDisplayString(indent + " ")).mkString("\n")
+    s"${indent}name = $name, type = Directory, size = $size\n$childrenStr"
 }
 
 case class File(id: Int,
@@ -21,7 +27,13 @@ case class File(id: Int,
                 name: String,
                 size: Int,
                 classification: Classification,
-                checksum: Int) extends Node
+                checksum: Int) extends Node {
+
+  override def toDisplayString(indent: String = ""): String =
+    s"${indent}name = $name, type = File, size = $size, classification = ${classification.value}, checksum = $checksum"
+}
+
+
 
 enum Classification(val value: String):
   case Public extends Classification("Public")

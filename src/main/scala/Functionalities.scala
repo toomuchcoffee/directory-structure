@@ -10,8 +10,7 @@ object Functionalities:
 
     def build(node: Node): Node = node match {
       case dir: Directory =>
-        val children = byParent.getOrElse(Some(dir.id), Nil).map(build)
-        dir.copy(children = children)
+        dir.copy(children = byParent.getOrElse(Some(dir.id), Nil).map(build))
       case _ => node
     }
 
@@ -21,13 +20,5 @@ object Functionalities:
     }
 
     build(root)
-  }
-
-  def printTree(node: Node, indent: String = ""): String = node match {
-    case d: Directory =>
-      val childrenStr = d.children.sortBy(_.name).map(printTree(_, indent + " ")).mkString("\n")
-      s"${indent}name = ${d.name}, type = Directory, size = ${d.size}\n$childrenStr"
-    case f: File =>
-      s"${indent}name = ${f.name}, type = File, size = ${f.size}, classification = ${f.classification.value}, checksum = ${f.checksum}"
   }
 

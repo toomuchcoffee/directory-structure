@@ -7,28 +7,19 @@ import java.nio.file.{Path, Paths}
 
 class FunctionalitiesTest extends AnyFunSuiteLike {
 
-  test("printTree should create correct result") {
+  test("buildTree should create correct result") {
     val resourceRoot = getResourceRootPath
     val inputPath = resourceRoot.resolve("input/directory-structure.csv").toString
     val outputPath = resourceRoot.resolve("output/tree.txt").toString
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
+    val tree = Functionalities.buildTree(nodes)
 
-    val expectedTree = readFileContent(outputPath)
-    val rootNode = Functionalities.buildTree(nodes)
-    val printedTree = Functionalities.printTree(rootNode)+"\n"
+    val actual = tree.toDisplayString()
+    val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
 
-    val expectedLines = expectedTree.replaceAll("\r\n", "\n").split("\n", -1)
-    val actualLines = printedTree.replaceAll("\r\n", "\n").split("\n", -1)
-
-    expectedLines.length shouldBe actualLines.length
-
-    expectedLines.zip(actualLines).zipWithIndex.foreach { case ((e, a), idx) =>
-      withClue(s"Line ${idx + 1} differs:\nExpected: '$e'\nActual  : '$a'\n") {
-        e shouldBe a
-      }
-    }
+    expected shouldBe actual
   }
 
   private def getResourceRootPath: Path =

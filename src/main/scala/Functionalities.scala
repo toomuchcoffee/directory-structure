@@ -1,6 +1,6 @@
 package de.toomuchcoffee.assignment
 
-import model.{Directory, File, Node}
+import model.{Classification, Directory, File, Node}
 
 object Functionalities:
 
@@ -20,5 +20,11 @@ object Functionalities:
     }
 
     build(root)
+  }
+
+  def filterBy(nodes: Seq[Node], classifications: Classification*): Seq[Node] = {
+    nodes
+      .collect { case f: File if classifications.toSet.contains(f.classification) => f }
+      .sortBy(_.name)
   }
 

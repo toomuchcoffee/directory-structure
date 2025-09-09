@@ -1,7 +1,5 @@
 package de.toomuchcoffee.assignment
 
-import model.{Classification, Directory, File, Node}
-
 import scala.io.Source
 
 object FileProcessor:

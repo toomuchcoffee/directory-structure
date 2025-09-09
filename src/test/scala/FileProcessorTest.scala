@@ -1,7 +1,6 @@
 package de.toomuchcoffee.assignment
 
-import model.Classification.{Public, Secret, TopSecret}
-import model.{Directory, File}
+import Classification.{Public, Secret, TopSecret}
 
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatest.matchers.should.Matchers.shouldBe

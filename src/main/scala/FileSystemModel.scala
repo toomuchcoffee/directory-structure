@@ -1,4 +1,4 @@
-package de.toomuchcoffee.assignment.model
+package de.toomuchcoffee.assignment
 
 sealed trait Node:
   def id: Int
@@ -32,7 +32,6 @@ case class File(id: Int,
   override def toDisplayString(indent: String = ""): String =
     s"${indent}name = $name, type = File, size = $size, classification = ${classification.value}, checksum = $checksum"
 }
-
 
 
 enum Classification(val value: String):

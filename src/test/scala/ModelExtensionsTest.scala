@@ -1,13 +1,14 @@
 package de.toomuchcoffee.assignment
 
-import model.Classification.{Public, Secret, TopSecret}
+import ModelExtensions.{buildTree, filterBy, sizeBy}
+import Classification.{Public, Secret, TopSecret}
 
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatest.matchers.should.Matchers.shouldBe
 
 import java.nio.file.{Path, Paths}
 
-class FunctionalitiesTest extends AnyFunSuiteLike {
+class ModelExtensionsTest extends AnyFunSuiteLike {
 
   test("buildTree should create correct result") {
     val resourceRoot = getResourceRootPath
@@ -16,7 +17,8 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
-    val tree = Functionalities.buildTree(nodes)
+
+    val tree = nodes.buildTree()
 
     val actual = tree.toDisplayString()
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
@@ -31,7 +33,8 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
-    val result = Functionalities.filterBy(nodes, TopSecret)
+
+    val result = nodes.filterBy(TopSecret)
 
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
@@ -46,7 +49,8 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
-    val result = Functionalities.filterBy(nodes, Secret)
+
+    val result = nodes.filterBy(Secret)
 
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
@@ -61,7 +65,8 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
-    val result = Functionalities.filterBy(nodes, Secret, TopSecret)
+
+    val result = nodes.filterBy(Secret, TopSecret)
 
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
@@ -75,7 +80,8 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
 
     val (errors, nodes) = FileProcessor.processFile(inputPath)
     assert(errors.isEmpty)
-    val result = Functionalities.sizeBy(nodes, Public)
+
+    val result = nodes.sizeBy(Public)
 
     result shouldBe 120L
   }

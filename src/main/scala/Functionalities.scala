@@ -28,3 +28,6 @@ object Functionalities:
       .sortBy(_.name)
   }
 
+  def sizeBy(nodes: Seq[Node], classifications: Classification*): Long =
+    filterBy(nodes, classifications: _*).map(_.size).sum
+

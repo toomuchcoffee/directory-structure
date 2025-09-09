@@ -1,6 +1,6 @@
 package de.toomuchcoffee.assignment
 
-import model.Classification.{Secret, TopSecret}
+import model.Classification.{Public, Secret, TopSecret}
 
 import org.scalatest.funsuite.AnyFunSuiteLike
 import org.scalatest.matchers.should.Matchers.shouldBe
@@ -21,7 +21,7 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
     val actual = tree.toDisplayString()
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
 
-    expected shouldBe actual
+    actual shouldBe expected
   }
 
   test("filterBy 'top-secret' should create correct result") {
@@ -36,7 +36,7 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
 
-    expected shouldBe actual
+    actual shouldBe expected
   }
 
   test("filterBy 'secret' should create correct result") {
@@ -51,7 +51,7 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
 
-    expected shouldBe actual
+    actual shouldBe expected
   }
 
   test("filterBy 'secret' or 'top-secret' should create correct result") {
@@ -66,7 +66,18 @@ class FunctionalitiesTest extends AnyFunSuiteLike {
     val actual = result.map(_.toDisplayString()).mkString("\n")
     val expected = readFileContent(outputPath).replaceAll("\r\n", "\n").trim
 
-    expected shouldBe actual
+    actual shouldBe expected
+  }
+
+  test("sizeBy 'public' should create correct result") {
+    val resourceRoot = getResourceRootPath
+    val inputPath = resourceRoot.resolve("input/directory-structure.csv").toString
+
+    val (errors, nodes) = FileProcessor.processFile(inputPath)
+    assert(errors.isEmpty)
+    val result = Functionalities.sizeBy(nodes, Public)
+
+    result shouldBe 120L
   }
 
   private def getResourceRootPath: Path =

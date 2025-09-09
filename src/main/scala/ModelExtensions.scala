@@ -20,12 +20,29 @@ object ModelExtensions:
       build(root)
     }
 
+  extension (node: Node)
     def filterBy(classifications: Classification*): Seq[Node] = {
-      nodes
-        .collect { case f: File if classifications.toSet.contains(f.classification) => f }
-        .sortBy(_.name)
+      val allowed = classifications.toSet
+
+      def recurse(node: Node): Seq[Node] = {
+        node match {
+          case file: File if allowed.contains(file.classification) => Seq(file)
+          case directory: Directory => directory.children.flatMap(child => recurse(child))
+          case _ => Seq.empty
+        }
+      }
+
+      recurse(node).sortBy(_.name)
     }
 
     def sizeBy(classifications: Classification*): Long =
       filterBy(classifications: _*).map(_.size).sum
-  
+
+
+    def findBy(name: String): Option[Node] = node match {
+      case n: Node if n.name == name => Some(n)
+      case d: Directory =>
+        d.children.flatMap(child => child.findBy(name).toSeq)
+          .headOption
+      case _ => None
+    }
